@@ -22,9 +22,7 @@ void linspace(double v[], double start, double stop, int n)
 	{
 		v[0]=start;
 	}
-// nie rozumiemiem
-
-
+// nie rozumiemie
 }
 
 // multiply each element of v by the value of scalar
