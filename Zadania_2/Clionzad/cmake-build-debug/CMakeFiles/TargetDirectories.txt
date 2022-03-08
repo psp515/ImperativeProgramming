@@ -1,0 +1,3 @@
+/Users/psp515/Documents/GitHub/PI/Zadania_2/Clionzad/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/psp515/Documents/GitHub/PI/Zadania_2/Clionzad/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/psp515/Documents/GitHub/PI/Zadania_2/Clionzad/cmake-build-debug/CMakeFiles/Clionzad.dir
