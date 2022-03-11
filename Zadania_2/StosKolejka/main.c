@@ -13,11 +13,13 @@ int top = 0;
 
 int stack_push(double x)
 {
-    if (top==10)
+    if (top>=10)
         return OVERFLOW;
 
     stack[top]=x;
     ++top;
+
+    return OK
 }
 
 double stack_pop(void)
@@ -72,7 +74,9 @@ void queue_push(int in_nr)
 void queue_pop(int out_nr)
 {
     if(out_nr>in){
-        printf("UNDERFLOW");
+        printf("UNDERFLOW ");
+        in=0;
+        return;
     }
 
     if(out_nr==in){
@@ -124,7 +128,7 @@ void cbuff_push(int cli_nr)
     }
 
     ++len;
-    cbuff[(out+len)%CBUFF_SIZE]= ++cli_nr;
+    cbuff[(out+len)%CBUFF_SIZE] = ++cli_nr;
 
 }
 
@@ -138,7 +142,7 @@ void cbuff_pop(void)
 
     --len;
     ++out;
-    out=out%10;
+    out=out%CBUFF_SIZE;
 
 }
 

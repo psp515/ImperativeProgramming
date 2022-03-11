@@ -33,11 +33,13 @@ int rand_from_interval(int a, int b)
 // 0 < n <= 100, jezeli nie to elementy tablicy tab maja wartosci nieokreslone.
 void rand_permutation(int n, int tab[])
 {
-    //zapytaj jaka to wersja jezyka C jest uzywana
+    if (n < 0)
+        return;
+
     for(int i =0;i<n;i++)
         tab[i]=i;
 
-    for(int i =0;i<n-2;i++)
+    for(int i =0; i<n-1; i++)
     {
         int k = rand_from_interval(i, n-1);
         int tmp = tab[k];
