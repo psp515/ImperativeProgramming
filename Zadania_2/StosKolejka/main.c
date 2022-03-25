@@ -6,20 +6,23 @@
 #define OK        0
 #define EMPTY    -1
 #define FULL     -2
-#define OVERFLOW -3
+#define OVERFLOW1 -3
 
 double stack[STACK_SIZE];
 int top = 0;
 
 int stack_push(double x)
 {
-    if (top>=10)
-        return OVERFLOW;
+    if (top>=STACK_SIZE)
+    {
+        printf("OVERFLOW ");
+        return OVERFLOW1;
+    }
 
     stack[top]=x;
     ++top;
 
-    return OK
+    return OK;
 }
 
 double stack_pop(void)
@@ -33,7 +36,7 @@ double stack_pop(void)
 
 int stack_state(void)
 {
-    return top==10?FULL:top;
+    return top==STACK_SIZE?FULL:top;
 }
 
 // FIFO queue with shifts
