@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.21"
@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "Zadania_4::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Zadania_4-Debug-30f7b8063259615b2465.json",
+					"jsonFile" : "target-Zadania_4-Debug-e5a58c9fc2044ff303a0.json",
 					"name" : "Zadania_4",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/psp515/Documents/GitHub/PI/Zadania_4/cmake-build-debug",
-		"source" : "/Users/psp515/Documents/GitHub/PI/Zadania_4"
+		"build" : "E:/Github/PI/Zadania_4/cmake-build-debug",
+		"source" : "E:/Github/PI/Zadania_4"
 	},
 	"version" : 
 	{

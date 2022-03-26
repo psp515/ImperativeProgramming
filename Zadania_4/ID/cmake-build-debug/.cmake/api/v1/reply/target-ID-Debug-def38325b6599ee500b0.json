@@ -2,7 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "ID"
+			"path" : "ID.exe"
+		},
+		{
+			"path" : "ID.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -35,7 +38,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk -mmacosx-version-min=10.15"
+					"fragment" : "-g"
 				},
 				{
 					"fragment" : "-std=gnu99"
@@ -68,12 +71,16 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
+			},
+			{
+				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+				"role" : "libraries"
 			}
 		],
 		"language" : "C"
 	},
 	"name" : "ID",
-	"nameOnDisk" : "ID",
+	"nameOnDisk" : "ID.exe",
 	"paths" : 
 	{
 		"build" : ".",

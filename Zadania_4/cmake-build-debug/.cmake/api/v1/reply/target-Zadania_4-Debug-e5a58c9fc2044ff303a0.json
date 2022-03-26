@@ -2,7 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Zadania_4"
+			"path" : "Zadania_4.exe"
+		},
+		{
+			"path" : "Zadania_4.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -35,7 +38,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk -mmacosx-version-min=10.15"
+					"fragment" : "-g"
 				}
 			],
 			"language" : "C",
@@ -57,12 +60,16 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
+			},
+			{
+				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+				"role" : "libraries"
 			}
 		],
 		"language" : "C"
 	},
 	"name" : "Zadania_4",
-	"nameOnDisk" : "Zadania_4",
+	"nameOnDisk" : "Zadania_4.exe",
 	"paths" : 
 	{
 		"build" : ".",

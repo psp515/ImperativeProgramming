@@ -1,0 +1,3 @@
+"E:\Programy\Clion\CLion 2021.3.4\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\ID.dir/objects.a
+"E:\Programy\Clion\CLion 2021.3.4\bin\mingw\bin\ar.exe" qc CMakeFiles\ID.dir/objects.a @CMakeFiles\ID.dir\objects1.rsp
+"E:\Programy\Clion\CLion 2021.3.4\bin\mingw\bin\gcc.exe" -g -Wl,--whole-archive CMakeFiles\ID.dir/objects.a -Wl,--no-whole-archive -o ID.exe -Wl,--out-implib,libID.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\ID.dir\linklibs.rsp

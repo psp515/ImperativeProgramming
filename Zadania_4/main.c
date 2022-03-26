@@ -49,15 +49,16 @@ void wc(int *nl, int *nw, int *nc) {
 
             if (line[i] == NEWLINE)
             {
-                if(i>=1 && line[i - 1] != NEWLINE && line[i - 1] != ' ' && line[i - 1] != '\t')
+                if(i>=1 && line[i - 1] != '\t' && line[i - 1] != '\n' && line[i - 1] != ' ')
                 {
                     *nw += 1;
                 }
+
                 break;
             }
 
-            if (i >= 1 && line[i - 1] != NEWLINE && line[i - 1] != ' ' && line[i - 1] != '\t'
-                && (line[i] == '\t'|| line[i] == NEWLINE || line[i] == ' ')){
+            if (i >= 1 && line[i - 1] != '\n' && line[i - 1] != ' ' && line[i - 1] != '\t' && (line[i] == '\t'|| line[i] == NEWLINE || line[i] == ' '))
+            {
                 *nw += 1;
             }
         }
@@ -73,20 +74,22 @@ void char_count(int char_no, int *n_char, int *cnt)
     while (1)
     {
         x = getchar();
+
         if (x==EOF)
             break;
+
         count[x-FIRST_CHAR] = count[x-FIRST_CHAR] + 1;
     }
 
-    int indeks[MAX_CHARS];
+    int index[MAX_CHARS];
     for (int i = 0; i < MAX_CHARS; i++)
-        indeks[i] = i;
+        index[i] = i;
 
-    qsort(indeks,MAX_CHARS, sizeof(int), cmp);
+    qsort(index,MAX_CHARS, sizeof(int), cmp);
 
     char_no -= 1;
-    *cnt = count[indeks[char_no]];
-    *n_char = indeks[char_no] + FIRST_CHAR;
+    *cnt = count[index[char_no]];
+    *n_char = index[char_no] + FIRST_CHAR;
 }
 
 void digram_count(int digram_no, int digram[])
@@ -97,10 +100,11 @@ void digram_count(int digram_no, int digram[])
     int i = getchar();
     int index[MAX_DIGRAMS];
 
-    for(; i != EOF;)
+    for(;i != EOF;)
     {
         int j = getchar();
-        if(j != EOF && j > FIRST_CHAR-1 && i > FIRST_CHAR-1 && j < LAST_CHAR && i < LAST_CHAR){
+        if(j != EOF && j < LAST_CHAR && j > FIRST_CHAR - 1 && i > FIRST_CHAR-1 && i < LAST_CHAR)
+        {
             count[(i-FIRST_CHAR) * MAX_CHARS + (j - FIRST_CHAR)]++;
         }
         i = j;
@@ -113,52 +117,54 @@ void digram_count(int digram_no, int digram[])
 
     digram_no -= 1;
     int val = index[digram_no] % MAX_CHARS + FIRST_CHAR;
-    digram[1] = val;
     digram[0] = ((index[digram_no] - val + FIRST_CHAR) / MAX_CHARS) + FIRST_CHAR;
+    digram[1] = val;
     digram[2] = count[index[digram_no]];
 }
 
-//TODO
 void find_comments(int *line_comment_counter, int *block_comment_counter)
 {
     *line_comment_counter = 0;
     *block_comment_counter = 0;
 
-    int  line4[MAX_LINE];
-    int flag_block = 0;
+    int  line[MAX_LINE];
+    int multiline_flag = 0;
 
     int c;
     int lenght;
-    for (lenght = 0; lenght < MAX_LINE && (c = getchar()) != EOF && c != '\n'; lenght++){
-        line4[lenght] = c;
+    for (lenght = 0; lenght < MAX_LINE && (c = getchar()) != EOF && c != '\n'; lenght++)
+    {
+        line[lenght] = c;
     }
 
     while (lenght != 0 || c != EOF)
     {
         for (int i = 1; i < lenght; ++i)
         {
-            if (flag_block == 0)
+            if (multiline_flag == 0)
             {
-                if (line4[i] == '/' && line4[i -1] == '/')
+                if (line[i] == '/' && line[i - 1] == '/')
                 {
                     *line_comment_counter+=1;
                     break;
                 }
 
-                if (line4[i] == '*' && line4[i - 1] == '/') {
+                if (line[i] == '*' && line[i - 1] == '/') {
                     *block_comment_counter += 1;
-                    flag_block = 1;
+                    multiline_flag = 1;
                 }
             }
-            if (line4[i] == '/' && line4[i - 1] == '*'){
-                flag_block = 0;
+            if (line[i] == '/' && line[i - 1] == '*'){
+                multiline_flag = 0;
                 i++;
             }
         }
 
         lenght = 0;
-        for (lenght = 0; lenght < MAX_LINE && (c = getchar()) != EOF && c != '\n'; lenght++){
-            line4[lenght] = c;
+
+        for (lenght = 0; lenght < MAX_LINE && (c = getchar()) != EOF && c != '\n'; lenght++)
+        {
+            line[lenght] = c;
         }
 
     }
