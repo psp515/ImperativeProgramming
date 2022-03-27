@@ -12,7 +12,7 @@
 #define MAX_IDS 1024
 char tab[MAX_IDS][MAX_ID_LEN];
 
-char words[1000][64] = {0};
+char words[8000][64] = {0};
 
 char *keywords[] = {
         "auto", "break", "case", "char",
@@ -25,102 +25,7 @@ char *keywords[] = {
         "unsigned", "void", "volatile", "while"
 };
 
-void create_words(char helper[], int end){
-    int flag =0;
-    int flagline = 0;
-    int flagblock = 0;
-    char word[MAX_ID_LEN] = {0};
-    int j = 0;
-    int wordidx = 0;
-    int string_flag = 0;
-    int second_string_flag = 0;
-
-    for(int i=0;i<end;i++)
-    {
-
-        if(helper[i]==34 && flagline ==0 && flagblock == 0 && second_string_flag == 0 && string_flag!=1)
-        {
-            string_flag = 1;
-            continue;
-        }
-        if(helper[i]==39 && flagline ==0 && flagblock == 0 && string_flag == 0 && second_string_flag!=1)
-        {
-            second_string_flag = 1;
-            continue;
-        }
-        if(string_flag == 1 )
-        {
-            if(helper[i]==34)
-            {
-                if(helper[i-1]!='\\')
-                {
-                    string_flag = 0;
-                }
-            }
-
-            continue;
-        }
-        if(second_string_flag == 1)
-        {
-            if(helper[i] == 39)
-            {
-                if(helper[i-1]!='\\')
-                {
-                    second_string_flag = 0;
-                }
-            }
-
-            continue;
-        }
-        if(flagline == 0 && flagblock == 0 && helper[i] == 47 && helper[i-1] == 47)
-        {
-            flagline=1;
-        }
-        if(flagline==1 && helper[i]==10)
-        {
-            flagline=0;
-        }
-
-
-        if(flagblock == 0 && (helper[i-1] == 47 && helper[i]==42))
-        {
-            flagblock=1;
-        }
-
-        if(flagblock == 1 && ((helper[i-1] == 42 && helper[i]==47)))
-        {
-            flagblock=0;
-        }
-
-        if(helper[i]!=32 && helper[i]!=61 && helper[i]!=10 &&
-           helper[i]!=59&&helper[i]!=9 && helper[i]!=0 &&
-           helper[i]!=40 && helper[i]!=41
-           && flagline ==0 && flagblock==0 && helper[i]!=43 &&
-           helper[i]!=45 && helper[i]!=42 &&
-           helper[i]!=47 && helper[i]!=44 &&
-           helper[i]!=93 && helper[i]!=91){
-            word[j]=helper[i];
-            j++;
-            flag = 1;
-        }
-
-        if((helper[i]==32 || helper[i]==61 || helper[i]==59 || helper[i]==10 ||
-            helper[i]==9 || helper[i]==0 || helper[i]==40 || helper[i]==41 || flagline ==1 || flagblock==1 || helper[i]==43||
-            helper[i]==45 || helper[i]==42 || helper[i]==47 || helper[i]==44 || helper[i]==93 || helper[i]==91))
-        {
-            j=0;
-            if(flag==1)
-            {
-                flag=0;
-                strcpy(words[wordidx],word);
-                wordidx++;
-                memset(word, 0, sizeof(word));
-            }
-        }
-    }
-}
-
-// 0-> to nie keyword,  1 -> to keyword
+// checks if word is keyword
 int is_keyowrd(int index)
 {
     for (int i = 0; i < 32; i++)
@@ -133,7 +38,7 @@ int is_keyowrd(int index)
     return  0;
 }
 
-//0 => nie ma w tab, 1 - jest w tab
+// checks if word is in tab
 int is_in_tab(int index, int last_in_tab)
 {
     for(int i =0;i<last_in_tab;i++)
@@ -146,76 +51,192 @@ int is_in_tab(int index, int last_in_tab)
     return 0;
 }
 
-int requirements()
+// count unical identificators
+int count_idents()
 {
-    int w_len=0;
-    int idx=0;
-    int id_count = 0;
+    int word_len = 0;
+    int index = 0;
+    int count = 0;
 
-    for(int i=0;i<100;i++)
-    {
-        if(*words[i]==0)
-        {
-            w_len=i;
-            break;
-        }
-    }
+    while (*words[word_len] != 0)
+        word_len++;
 
-    for(int i=0; i < w_len; i++)
+    for(int i = 0; i < word_len; i++)
     {
-        if(words[i][0] == 95 || (words[i][0] > 64 && words[i][0] < 91) || (words[i][0] > 96 && words[i][0]<123))
+        int valid = 0;
+
+        if(words[i][0] == 95 ||  (words[i][0] > 96 && words[i][0]<123) || (words[i][0] > 64 && words[i][0] < 91))
         {
-            int valid = 1;
+            valid = 1;
 
             for(int j = 1; j < strlen(words[i]); j++)
             {
-                if(!((words[i][j]>64 && words[i][j]<91)||(words[i][j]>96 && words[i][j]<123) || (words[i][j]>47 && words[i][j]<58)))
-                {
+                if(!((words[i][j] == 95) || (words[i][j] > 64 && words[i][j] < 91) ||(words[i][j] > 96 && words[i][j] < 123) || (words[i][j]>47 && words[i][j]<58)))
                     valid = 0;
-                    break;
-                }
+
             }
 
-            if(valid == 1)
+            if(valid==1)
             {
                 if(is_keyowrd(i) == 1)
                     continue;
 
-                if(is_in_tab(i, idx))
+                if(is_in_tab(i, index))
                     continue;
 
-                strcpy(tab[idx],words[i]);
-                idx++;
-                id_count++;
+                strcpy(tab[index],words[i]);
 
+                index++;
+                count++;
             }
         }
     }
 
-    return id_count;
+    return count;
 }
 
+// main func
 int find_idents()
 {
-    char c = getchar();
-    char helper[25000] = {0};
-    int count = 0;
-
+    //for geting signs
     int i = 0;
+    char c = getchar();
+    char helper[26000] = {0};
+
+    //Flags
+    int falg = 0;
+    int flagline = 0;
+    int flagblock = 0;
+    int string_flag = 0;
+    int second_string_flag = 0;
+
+    //other
+    char word[64] = {0};
+    int j = 0;
+    int index = 0;
+
+    // geting signs
     while(c!=EOF)
     {
         helper[i] = c;
         i++;
-        c=getchar();
+        c = getchar();
     }
 
-    create_words(helper, i);
-    count = requirements();
-    return count;
+    //looks for words
+    for(int itr =0; itr < i; itr++)
+    {
+
+        // Tutaj dodane 2 rzeczy moze da sie to jakos inaczej poukładać ale mi sie nie chciało
+
+        if(helper[itr]=='\'' && helper[itr-1]=='\\' && helper[itr-2]=='\\')
+        {
+            second_string_flag = 0;
+            continue;
+        }
+
+        if(helper[itr]=='\\')
+        {
+            itr++;
+            continue;
+        }
+        // Koniec dodanych rzeczy
+        // nizej jeszcze 1 rzecz dodana pomijanie ':'
+
+
+        if(helper[itr] == 39 && flagline == 0 && flagblock == 0 && string_flag == 0 && second_string_flag==0)
+        {
+            second_string_flag = 1;
+        }
+        else
+        {
+            if(helper[itr] == 34 && flagline ==0 && flagblock == 0 && second_string_flag == 0 && string_flag==0)
+            {
+                string_flag = 1;
+            }
+            else
+            {
+                if(second_string_flag == 1)
+                {
+                    if(helper[itr] == 39)
+                    {
+                        if(helper[itr-1]!='\\')
+                            second_string_flag = 0;
+                    }
+
+                }
+                else
+                {
+                    if(string_flag == 1 )
+                    {
+                        if(helper[itr]==34)
+                        {
+                            if(helper[itr-1]!='\\')
+                                string_flag = 0;
+                        }
+                        continue;
+                    }
+                    else
+                    {
+
+                        if(flagline == 0 && flagblock == 0 && helper[itr] == 47 && helper[itr-1] == 47)
+                        {
+                            flagline=1;
+                            continue;
+                        }
+
+                        if(flagline==1 && helper[itr]==10)
+                        {
+                            flagline=0;
+                            continue;
+                        }
+
+                        if(flagblock == 0 && (helper[itr-1] == 47 && helper[itr]==42))
+                        {
+                            flagblock=1;
+                            continue;
+                        }
+
+                        if(flagblock == 1 && ((helper[itr-1] == 42 && helper[itr]==47)))
+                        {
+                            flagblock=0;
+                            continue;
+                        }
+
+                        if(helper[itr]!=32 && helper[itr]!=61 && helper[itr]!=10 && helper[itr]!=59&&helper[itr]!=9 && helper[itr]!=0 && helper[itr]!=40
+                          && helper[itr]!=41 && flagline ==0 && flagblock==0 && helper[itr]!=43 && helper[itr]!=45 && helper[itr]!=42 && helper[itr]!=47
+                           && helper[itr]!=44 && helper[itr]!=93 && helper[itr]!=91 && helper[itr]!=58)
+                        {
+                            // w tym if ie dodane do pominiecia helper[itr] != 58
+                            word[j]=helper[itr];
+                            j++;
+                            falg = 1;
+                        }
+
+                        if(flagline == 1 || flagblock== 1 || helper[itr]==32 || helper[itr]==61 || helper[itr]==59 || helper[itr]==10 || helper[itr]==9 || helper[itr]==0 ||
+                           helper[itr]==40 || helper[itr]==41 ||  helper[itr]==43|| helper[itr]==45 || helper[itr]==42 || helper[itr]==47 || helper[itr]==44 || helper[itr]==93 || helper[itr]==91)
+                        {
+                            j=0;
+                            if(falg==1)
+                            {
+                                falg = 0;
+                                strcpy(words[index],word);
+                                memset(word, 0, sizeof(word));
+                                index++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return count_idents();
 }
 
-int main(void) {
+int main(void)
+{
     printf("%d\n", find_idents());
+    int i =0;
     return 0;
 }
-

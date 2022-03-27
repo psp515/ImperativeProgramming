@@ -1,0 +1,127 @@
+int index_cmp(const void*, const void*);
+int cmp(const void*, const void*);
+
+char tab[MAX_IDS][MAX_ID_LEN];
+
+char *keywords[] = {
+	"auto", "break", "case", "char",
+	"const", "continue", "default", "do",
+	"double", "else", "enum", "extern",
+	"float", "for", "goto", "if",
+	"int", "long", "register", "return",
+	"short", "signed", "sizeof", "static",
+	"struct", "switch", "typedef", "union",
+	"unsigned", "void", "volatile", "while"
+};
+
+int find_idents() {
+	int c, c_next;
+	int state = 0;
+	int pos = 0, id_no = 0;
+	int indices[MAX_IDS];
+
+	for (int i = 0; i < MAX_IDS; ++i) {
+		indices[i] = i;
+	}
+
+	while ((c = getchar()) != EOF) {
+		switch (state) {
+
+			case IN_LINE_COMMENT:
+				if (c == '\n') {
+					state = 0; // end of line comment
+				}
+				break;
+
+			case IN_BLOCK_COMMENT:
+				if (c != '*') break;
+				c_next = getchar();
+				if (c_next == '/') {
+					state = 0; // end of block comment
+				} else {
+					ungetc(c_next, stdin);
+				}
+				break;
+
+			case IN_STRING:
+				if (c == '\"') {
+					state = 0; // end of string
+					break;
+				}
+				if (c == '\\') {
+					getchar(); // skip next char after backslash (escaped char)
+				}
+				break;
+
+			case IN_ID:
+				if (c == '_' || isalnum(c)) {
+					tab[id_no][pos++] = (char)c;
+				} else { // end of id
+					tab[id_no][pos] = '\0';
+					pos = 0;
+					id_no++;
+					state = 0;
+				}
+				break;
+
+			default:
+				if (c == '\"') { // string begins
+					state = IN_STRING;
+					break;
+				}
+				if (c == '_' || isalpha(c)) { // id begins
+					state = IN_ID;
+					tab[id_no][pos++] = (char)c;
+					break;
+				}
+				if (c != '/') break;
+				c_next = getchar();
+				if (c_next == '/') {
+					state = IN_LINE_COMMENT; // line comment begins
+					break;
+				}
+				if (c_next == '*') {
+					state = IN_BLOCK_COMMENT; // block comment begins
+					break;
+				}
+				ungetc(c_next, stdin);
+				break;
+		}
+	}
+
+	qsort(indices, (size_t) id_no, sizeof(int), index_cmp);
+	int unique = 0;
+
+	size_t n_keywords = sizeof(keywords) / sizeof(char*);
+	for (int i = 0; i < id_no; ++i) {
+		if (i > 0 && strcmp(tab[indices[i - 1]], tab[indices[i]]) == 0) {
+			continue; // id already found
+		}
+		char *key = tab[indices[i]];
+//		printf("%s\n", key);
+		if (bsearch(&key, keywords, n_keywords, sizeof(char*), cmp) == NULL) {
+//			printf("---- %s\n", key);
+			// not a keyword
+			++unique;
+		}
+	}
+	return unique;
+}
+
+int cmp(const void* first_arg, const void* second_arg) {
+	char *a = *(char**)first_arg;
+	char *b = *(char**)second_arg;
+	return strcmp(a, b);
+}
+
+int index_cmp(const void* first_arg, const void* second_arg) {
+	int a = *(int*)first_arg;
+	int b = *(int*)second_arg;
+	return strcmp(tab[a], tab[b]);
+}
+
+int main(void) {
+	printf("%d\n", find_idents());
+	return 0;
+}
+
