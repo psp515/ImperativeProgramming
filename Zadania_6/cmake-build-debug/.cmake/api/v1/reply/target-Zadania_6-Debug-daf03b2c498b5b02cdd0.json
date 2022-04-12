@@ -2,10 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Zadania_5.exe"
-		},
-		{
-			"path" : "Zadania_5.pdb"
+			"path" : "Zadania_6"
 		}
 	],
 	"backtrace" : 1,
@@ -38,7 +35,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g"
+					"fragment" : "-g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk -mmacosx-version-min=10.15"
 				},
 				{
 					"fragment" : "-std=gnu99"
@@ -59,7 +56,7 @@
 			]
 		}
 	],
-	"id" : "Zadania_5::@6890427a1f51a3e7e1df",
+	"id" : "Zadania_6::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -71,16 +68,12 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
-			},
-			{
-				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
-				"role" : "libraries"
 			}
 		],
 		"language" : "C"
 	},
-	"name" : "Zadania_5",
-	"nameOnDisk" : "Zadania_5.exe",
+	"name" : "Zadania_6",
+	"nameOnDisk" : "Zadania_6",
 	"paths" : 
 	{
 		"build" : ".",
