@@ -78,7 +78,7 @@ int is_asymmetric(pair* array, int size)
     {
         for(int j = 0; j < size; j++)
         {
-            if(array[i].first > array[j].second && array[j].first > array[i].second)
+            if(array[i].first == array[j].second && array[j].first == array[i].second)
                 continue;
             else
                 return 1;
@@ -111,6 +111,7 @@ int is_transitive(pair* array, int size)
     }
     return 1;
 }
+//1 10 2 3 2 4 3 4 0 1 0 2 0 3 0 4 1 3 1 2 1 4
 
 // Case 2:
 // A partial order relation is a homogeneous relation that is
@@ -151,15 +152,201 @@ int is_total_order(pair* arr, int size)
 }
 
 
-int find_max_elements(pair* arr, int size, int* max){}
-int find_min_elements(pair* arr, int size, int* min){}
-int get_domain(pair* arr, int size, int* domain){}
+int find_max_elements(pair* array, int size, int* max)
+{
+    int count = 0;
 
+    for(int i=0; i < size; i++)
+    {
+        int is_ok = 1;
+        // sprawdzam czy element jest max
+        for(int j = 0; j < size; j++)
+        {
+            if(array[j].first == array[i].second && array[i].first == array[j].second ||
+                    array[i].first != array[j].first && array[j].second != array[i].second)
+            {
+                is_ok = 0;
+                break;
+            }
+        }
+
+        // jezeli to element max
+        if(is_ok == 1)
+        {
+            //gdy jeest pierwszy
+            if(count==0)
+            {
+                max[count] = array[i].first;
+                count++;
+            }
+            else
+            {
+
+                int is_ok = 1;
+                // sprawdzam czy to nie powtorka
+                for(int z = 0; z<count; z++)
+                {
+                    if(max[z]== array[i].first)
+                    {
+                        is_ok=0;
+                        break;
+                    }
+                }
+
+                // jezeli to powtorka to skip
+                if(is_ok==1)
+                {
+                    int k = count-1;
+                    while(k >= 0 && max[k] > array[i].first)
+                    {
+                        max[k+1] = max[k];
+                        k--;
+                    }
+
+                    max[k+1] = array[i].first;
+                    count++;
+                }
+            }
+        }
+    }
+
+    return count;
+}
+
+int find_min_elements(pair* array, int size, int* min)
+{
+    int count = 0;
+
+    for(int i=0; i < size; i++)
+    {
+        int is_ok = 1;
+        // sprawdzam czy element jest max
+        for(int j = 0; j < size; j++)
+        {
+            if(array[i].first == array[j].second && array[j].first == array[i].second ||
+               array[i].first != array[j].first && array[j].second != array[i].second)
+            {
+                is_ok = 0;
+                break;
+            }
+        }
+
+        // jezeli to element max
+        if(is_ok == 1)
+        {
+            //gdy jeest pierwszy
+            if(count==0)
+            {
+                min[count] = array[i].first;
+                count++;
+            }
+            else
+            {
+
+                int is_ok = 1;
+                // sprawdzam czy to nie powtorka
+                for(int z = 0; z<count; z++)
+                {
+                    if(min[z]== array[i].first)
+                    {
+                        is_ok=0;
+                        break;
+                    }
+                }
+
+                // jezeli to powtorka to skip
+                if(is_ok==1)
+                {
+                    int k = count-1;
+                    while(k >= 0 && min[k] > array[i].first)
+                    {
+                        min[k+1] = min[k];
+                        k--;
+                    }
+
+                    min[k+1] = array[i].first;
+                    count++;
+                }
+            }
+        }
+    }
+
+    return count;
+}
+
+int get_domain(pair* array, int size, int* domain)
+{
+    int j = 0;
+    domain[j] = array[0].first;
+    j++;
+    if(array[0].first != array[0].second)
+    {
+        domain[j] = array[0].second;
+        j++;
+    }
+
+    for(int i = 1; i < size; i++)
+    {
+        int is_ok = 1;
+        for(int k = 0; k < j;k++)
+        {
+            if(domain[k] == array[i].first)
+            {
+                is_ok = 0;
+                break;
+            }
+        }
+
+        if (is_ok == 1)
+        {
+            int k = j-1;
+            while(k >= 0 && domain[k] > array[i].first)
+            {
+                domain[k+1] = domain[k];
+                k--;
+            }
+
+            domain[k+1] = array[i].first;
+            j++;
+        }
+
+        is_ok = 1;
+
+        for(int k = 0; k < j;k++)
+        {
+            if(domain[k] == array[i].second)
+            {
+                is_ok = 0;
+                break;
+            }
+        }
+
+        if (is_ok == 1)
+        {
+            int k = j-1;
+            while(k >= 0 && domain[k] > array[i].second)
+            {
+                domain[k+1] = domain[k];
+                k--;
+            }
+
+            domain[k+1] = array[i].second;
+            j++;
+        }
+    }
+
+    return j;
+}
+// 2 12 1 4 1 1 1 5 1 6 2 4 2 2 2 6 3 4 3 3 4 4 6 6 5 5
 // Case 3:
-int composition (pair* arr1, int n1, pair* arr2, int n2, pair* out_arr){}
+int composition (pair* arr1, int n1, pair* arr2, int n2, pair* out_arr)
+{
+
+}
 
 int cmp (pair p1, pair p2) {
-    if (p1.first == p2.first) return p1.second - p2.second;
+    if (p1.first == p2.first)
+        return p1.second - p2.second;
     return p1.first - p2.first;
 }
 
