@@ -1,0 +1,47 @@
+2
+4
+2 3. 1e-1 -5
+1 2 3
+0 -5
+1 2 3 4
+int read_dbl_lines_v1(double *ptr_tab[]){
+    int count = 0;
+    char *line=NULL;
+    size_t len = 0;
+    int i=0;
+    int n;
+    int k=0;
+    int o = 0;
+    int flag = 1;
+    while((getline(&line, &len, stdin))!=-1){
+        //printf("%c",line[0]);
+        flag = 0;
+        o = 0;
+        while(sscanf(line,"%lf%n",&ptr_tab[0][i],&n)==1){
+            line+=n;
+            i++;
+            o++;
+            flag = 1;
+        }
+        if(flag == 1){
+            count++;
+            //printf("\n");
+            //printf("%d",k);
+            //printf("\n");
+            ptr_tab[count]=&ptr_tab[0][k];
+            //printf("%lf",*ptr_tab[count]);
+            //printf("\n");
+            k+=o;
+        }
+    }
+    ptr_tab[count+1]=&ptr_tab[0][k];
+    return count;
+}
+
+void write_dbl_line_v1(double *ptr_tab[], int n){
+    while(ptr_tab[n]!=ptr_tab[n+1]){
+
+        printf("%.2lf ",*ptr_tab[n]);
+        ptr_tab[n]++;
+    }
+}
