@@ -86,25 +86,25 @@ void delete_lines(char *tab[], int line_count)
         free(tab[i]);
 }
 //OK?
-int read_dbl_lines_v1(double *ptr_tab[])
-{
-    int count, num_len;
-    size_t len = 0;
+int read_dbl_lines_v1(double *ptr_tab[]){
+
+    int count, num_len, len = 0;
     char *line=NULL;
     while(getline(&line, &len, stdin) != -1)
     {
         int number_count = 0, has_numbers = 0;
-
-        double arr[BUFSIZ], x;
-
+        double arr[BUFSIZ] = {0};
+        double x;
         while(sscanf(line,"%lf%n", &x, &num_len)==1)
         {
+            if(x == 33)
+                printf("");
             line += num_len;
             has_numbers = 1;
             arr[number_count] = x;
             number_count += 1;
+            printf("%.2lf ", x);
         }
-
         if(has_numbers == 1)
         {
             count++;
@@ -115,6 +115,7 @@ int read_dbl_lines_v1(double *ptr_tab[])
 
             ptr_tab[count][number_count] = -1;
         }
+        int h =0;
     }
 
     return count;
