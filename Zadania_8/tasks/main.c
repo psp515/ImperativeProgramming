@@ -88,19 +88,19 @@ void delete_lines(char *tab[], int line_count)
 //OK?
 int read_dbl_lines_v1(double *ptr_tab[])
 {
-    int count, num_len;
+    int count;
     size_t len = 0;
     char *line=NULL;
     while(getline(&line, &len, stdin) != -1)
     {
-        int number_count = 0, has_numbers = 0;
+        int number_count = 0, has_numbers = 0,num_len = 0;
 
         double arr[BUFSIZ], x;
 
-        while(sscanf(line,"%lf%n", &x, &num_len)==1)
+        while(sscanf(line,"%lf%n", &x, &num_len) == 1)
         {
-            line += num_len;
             has_numbers = 1;
+            line += num_len;
             arr[number_count] = x;
             number_count += 1;
         }
@@ -108,7 +108,7 @@ int read_dbl_lines_v1(double *ptr_tab[])
         if(has_numbers == 1)
         {
             count++;
-            ptr_tab[count] = malloc(sizeof (double ) * (number_count+2));
+            ptr_tab[count] = malloc(sizeof (double ) * (number_count+1));
 
             for(int z = 0; z < number_count;z++)
                 ptr_tab[count][z] = arr[z];
@@ -116,7 +116,6 @@ int read_dbl_lines_v1(double *ptr_tab[])
             ptr_tab[count][number_count] = -1;
         }
     }
-
     return count;
 }
 
@@ -168,10 +167,3 @@ int main(void) {
     }
     return 0;
 }
-/*
-3
-2
-To jest wiersz 1,
-a to drugi.
-Trzeciego nie ma.
- */
