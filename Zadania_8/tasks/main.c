@@ -85,48 +85,48 @@ void delete_lines(char *tab[], int line_count)
     for(int i = 0; i < line_count; i++)
         free(tab[i]);
 }
+
 //OK?
 int read_dbl_lines_v1(double *ptr_tab[])
 {
-    int count;
+    int count = 1;
     size_t len = 0;
     char *line=NULL;
+    double *buff = ptr_tab[0];
+    int total_count = 0;
+
     while(getline(&line, &len, stdin) != -1)
     {
-        int number_count = 0, has_numbers = 0,num_len = 0;
+        int has_numbers = 0,num_len = 0;
 
-        double arr[BUFSIZ], x;
-
-        while(sscanf(line,"%lf%n", &x, &num_len) == 1)
+        double *start = &buff[total_count];
+        while(sscanf(line,"%lf%n", &buff[total_count] , &num_len) == 1)
         {
             has_numbers = 1;
             line += num_len;
-            arr[number_count] = x;
-            number_count += 1;
+            total_count++;
         }
 
-        if(has_numbers == 1)
+        if(has_numbers)
         {
+            ptr_tab[count] = start;
             count++;
-            ptr_tab[count] = malloc(sizeof (double ) * (number_count+1));
-
-            for(int z = 0; z < number_count;z++)
-                ptr_tab[count][z] = arr[z];
-
-            ptr_tab[count][number_count] = -1;
         }
+
     }
+
+
     return count;
 }
 
 //OK
 void write_dbl_line_v1(double *ptr_tab[], int n)
 {
-    int i = 0;
-    while(ptr_tab[n][i] != -1)
+    double *first = ptr_tab[n];
+    while (first != ptr_tab[n + 1])
     {
-        printf("%.2lf ", ptr_tab[n][i]);
-        i++;
+        printf("%.2f ", *first);
+        first += 1;
     }
 }
 
