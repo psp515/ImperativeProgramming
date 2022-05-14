@@ -1,0 +1,3 @@
+/Users/psp515/Documents/GitHub/PI/Zadania_10/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/psp515/Documents/GitHub/PI/Zadania_10/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/psp515/Documents/GitHub/PI/Zadania_10/cmake-build-debug/CMakeFiles/Zadania_10.dir
