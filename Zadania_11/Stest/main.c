@@ -226,13 +226,17 @@ void insert_elem(List *p_list, void *p_data) {
         ListElement *first = p_list->head;
         ListElement *prev = NULL;
 
-        while (first != NULL){
-
-            if(p_list->compare_data(p_data, first->data) < 0) break;
+        while (first != NULL)
+        {
+            if (p_list->compare_data(p_data, first->data) < 0)
+                break;
 
             prev = first;
             first = first->next;
         }
+
+        if (prev != NULL && p_list->compare_data(p_data, prev->data) == 0)
+            return;
 
         if (first == p_list->head)
         {
