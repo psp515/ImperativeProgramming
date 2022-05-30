@@ -1,3 +1,0 @@
-"E:\Programy\Clion\CLion 2021.3.4\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\Zadania_4.dir/objects.a
-"E:\Programy\Clion\CLion 2021.3.4\bin\mingw\bin\ar.exe" qc CMakeFiles\Zadania_4.dir/objects.a @CMakeFiles\Zadania_4.dir\objects1.rsp
-"E:\Programy\Clion\CLion 2021.3.4\bin\mingw\bin\gcc.exe" -g -Wl,--whole-archive CMakeFiles\Zadania_4.dir/objects.a -Wl,--no-whole-archive -o Zadania_4.exe -Wl,--out-implib,libZadania_4.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Zadania_4.dir\linklibs.rsp
