@@ -1,3 +1,0 @@
-E:/Github/PI/Zadania_4/ID/cmake-build-debug/CMakeFiles/edit_cache.dir
-E:/Github/PI/Zadania_4/ID/cmake-build-debug/CMakeFiles/ID.dir
-E:/Github/PI/Zadania_4/ID/cmake-build-debug/CMakeFiles/rebuild_cache.dir
