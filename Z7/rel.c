@@ -143,11 +143,7 @@ int is_transitive(pair* array, int size)
 // OK
 int is_partial_order(pair* arr, int size)
 {
-    int a = is_antisymmetric(arr, size);
-    int b = is_transitive(arr,size);
-    int c = is_reflexive(arr, size);
-
-    if(a && b && c)
+    if(is_antisymmetric(arr, size) && is_transitive(arr,size) && is_reflexive(arr, size))
         return 1;
 
     return 0;
@@ -188,10 +184,7 @@ int is_connected(pair* array, int size)
 // A total order relation is a partial order relation that is connected
 int is_total_order(pair* arr, int size)
 {
-    int a = is_partial_order(arr, size);
-    int b = is_connected(arr, size);
-
-    if(a && b)
+    if(is_partial_order(arr, size) && is_connected(arr, size))
         return 1;
 
     return 0;
@@ -347,7 +340,7 @@ int composition (pair* arr1, int n1, pair* arr2, int n2, pair* out_arr)
 {
     int count = 0;
 
-    for(int i =0;i < n1;i++)
+    for(int i =0; i < n1; i++)
     {
         for(int j = 0; j < n2; j++)
         {
@@ -391,13 +384,6 @@ int cmp (pair p1, pair p2)
     return p1.first - p2.first;
 }
 
-// Add pair to existing relation if not already there
-int add_relation (pair* array, int size, pair p)
-{
-    //unused
-    return 0;
-}
-
 // Read number of pairs, n, and then n pairs of ints
 int read_relation(pair* array)
 {
@@ -431,11 +417,11 @@ int read_relation(pair* array)
 }
 
 void print_int_array(int *array, int n)
-
+{
     printf("%d\n", n);
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i)
         printf("%d ", array[i]);
-    }
+
     printf("\n");
 }
 

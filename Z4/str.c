@@ -16,11 +16,13 @@
 #define IN_BLOCK_COMMENT 2
 
 int count[MAX_DIGRAMS] = { 0 };
+
 int cmp (const void *a, const void *b)
 {
     int va = *(int*)a;
     int vb = *(int*)b;
-    if (count[va] == count[vb]) return va - vb; // sort alphabetically if counts equal
+    if (count[va] == count[vb])
+        return va - vb; // sort alphabetically if counts equal
     return count[vb] - count[va];
 }
 int cmp_di (const void *a, const void *b)
@@ -28,9 +30,11 @@ int cmp_di (const void *a, const void *b)
     int va = *(int*)a;
     int vb = *(int*)b;
     // sort according to second char if counts and the first char equal
-    if (count[va] == count[vb] && va / MAX_CHARS == vb / MAX_CHARS) return va % MAX_CHARS - vb % MAX_CHARS;
+    if (count[va] == count[vb] && va / MAX_CHARS == vb / MAX_CHARS)
+        return va % MAX_CHARS - vb % MAX_CHARS;
     // sort according to first char if counts equal
-    if (count[va] == count[vb]) return va / MAX_CHARS - vb / MAX_CHARS;
+    if (count[va] == count[vb])
+        return va / MAX_CHARS - vb / MAX_CHARS;
     return count[vb] - count[va];
 }
 

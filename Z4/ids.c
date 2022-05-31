@@ -29,11 +29,9 @@ char *keywords[] = {
 int is_keyowrd(int index)
 {
     for (int i = 0; i < 32; i++)
-    {
-        int same = strcmp(words[index], keywords[i]);
-        if(same == 0)
+        if(strcmp(words[index], keywords[i]) == 0)
             return 1;
-    }
+
 
     return  0;
 }
@@ -42,11 +40,8 @@ int is_keyowrd(int index)
 int is_in_tab(int index, int last_in_tab)
 {
     for(int i =0;i<last_in_tab;i++)
-    {
-        int same = strcmp(words[index], tab[i]);
-        if(same == 0)
+        if(strcmp(words[index], tab[i]) == 0)
             return 1;
-    }
 
     return 0;
 }
@@ -159,21 +154,17 @@ int find_idents()
                 if(second_string_flag == 1)
                 {
                     if(helper[itr] == 39)
-                    {
                         if(helper[itr-1]!='\\')
                             second_string_flag = 0;
-                    }
-
                 }
                 else
                 {
                     if(string_flag == 1 )
                     {
                         if(helper[itr]==34)
-                        {
                             if(helper[itr-1]!='\\')
                                 string_flag = 0;
-                        }
+
                         continue;
                     }
                     else

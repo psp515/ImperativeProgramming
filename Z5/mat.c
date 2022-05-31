@@ -6,43 +6,34 @@
 void read_vector(double x[], int n)
 {
     for(int i = 0; i < n; ++i)
-    {
         scanf("%lf", x++);
-    }
+
 }
 
 void print_vector(double x[], int n)
 {
     for(int i = 0; i < n; ++i)
-    {
         printf("%.4f ", x[i]);
-    }
+
     printf("\n");
 }
 
 void read_mat(double A[][SIZE], int m, int n)
 {
     for(int i = 0; i < m; ++i)
+        for(int j = 0; j < n; ++j)
+            scanf("%lf", &A[i][j]);
+}
+
+void print_mat(double A[][SIZE], int m, int n)
+{
+    for(int i = 0; i < m; ++i)
     {
         for(int j = 0; j < n; ++j)
-        {
-            scanf("%lf", &A[i][j]);
-        }
-    }
-}
-
-void print_mat(double A[][SIZE], int m, int n) {
-    for(int i = 0; i < m; ++i) {
-        for(int j = 0; j < n; ++j) {
             printf("%.4f ", A[i][j]);
-        }
+
         printf("\n");
     }
-}
-
-void print_mat_ind(double A[][SIZE], int m, int n, const int indices[])
-{
-    // unused
 }
 
 // 5.1
@@ -60,22 +51,6 @@ void mat_product(double A[][SIZE], double B[][SIZE], double AB[][SIZE], int m, i
 
         }
     }
-}
-
-// Calculate matrix - vector product
-void mat_vec_product(double A[][SIZE], const double b[], double Ab[], int m, int n)
-{
-    //unused
-}
-
-void backward_substit(double A[][SIZE], double x[], int n)
-{
-    //unused
-}
-
-void backward_substitution_index(double A[][SIZE], const int indices[], double x[], int n)
-{
-    //unused
 }
 
 // 5.2
@@ -118,10 +93,9 @@ double gauss(double A[][SIZE], const double b[], double x[], const int n, const 
         index[i] = i;
 
     if(b!=NULL)
-    {
         for (int i = 0; i < n; ++i)
             x[i] = b[i];
-    }
+
 
     double det = 1;
     int swaps=0;
@@ -166,7 +140,8 @@ double gauss(double A[][SIZE], const double b[], double x[], const int n, const 
     for(int i = 0; i < swaps;i++)
         det*=-1;
 
-    if(det != 0 && x != NULL && b!= NULL){
+    if(det != 0 && x != NULL && b!= NULL)
+    {
         for(int i = n - 1; i >=0; i--)
         {
             for(int j = n - 1; j > i; j--)
