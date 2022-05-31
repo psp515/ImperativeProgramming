@@ -60,7 +60,8 @@ void dump_list_if(List *p_list, void *data)
 {
     ListElement *x = p_list->head;
 
-    while(x != NULL){
+    while(x != NULL)
+    {
         if (p_list->compare_data(x->data, data) == 0)
             p_list->dump_data(x->data);
 
@@ -90,10 +91,9 @@ void free_list(List* p_list)
         p_list->free_data(x->data);
         x = x->next;
     }
+
     p_list->head = NULL;
     p_list->tail = NULL;
-
-
 }
 
 // Push element at the beginning of the list
@@ -197,19 +197,6 @@ void insert_in_order(List *p_list, void *data)
     p_list->insert_sorted(p_list, data);
 }
 
-// find element in sorted list after which to insert given element
-ListElement* find_insertion_point(const List *p_list, ListElement *p_element)
-{
-    //unused
-    return NULL;
-}
-
-// Insert element after 'previous'
-void push_after(List *p_list, void *data, ListElement *previous)
-{
-    //unused
-}
-
 // Insert element preserving order (no counter)
 void insert_elem(List *p_list, void *p_data)
 {
@@ -267,9 +254,7 @@ typedef struct DataInt
 
 void dump_int(const void *d)
 {
-    DataInt dw = *(DataInt*)d;
-
-    printf("%d ", dw.id);
+    printf("%d ", (*(DataInt*)d).id);
 }
 
 void free_int(void *d)
@@ -279,10 +264,7 @@ void free_int(void *d)
 
 int cmp_int(const void *a, const void *b)
 {
-    int aw = *(int *)a;
-    int bw = *(int *)b;
-
-    return aw - bw;
+    return (*(int *)a) - (*(int *)b);
 }
 
 DataInt *create_data_int(int v)
@@ -303,9 +285,7 @@ typedef struct DataWord
 
 void dump_word (const void *d)
 {
-    DataWord dw = *(DataWord *)d;
-
-    printf("%s\n", dw.word);
+    printf("%s\n", (*(DataWord *)d).word);
 }
 
 void dump_word_lowercase (const void *d)
@@ -321,27 +301,19 @@ void dump_word_lowercase (const void *d)
 
 void free_word(void *d)
 {
-    DataWord dw = *(DataWord *)d;
-
-    free(dw.word);
+    free((*(DataWord *)d).word);
     free(d);
 }
 
 // conpare words case insensitive
 int cmp_word_alphabet(const void *a, const void *b)
 {
-    DataWord aw = *(DataWord *)a;
-    DataWord bw = *(DataWord *)b;
-
-    return strcasecmp(aw.word, bw.word);
+    return strcasecmp((*(DataWord *)a).word, (*(DataWord *)b).word);
 }
 
 int cmp_word_counter(const void *a, const void *b)
 {
-    DataWord aw = *(DataWord *)a;
-    DataWord bw = *(DataWord *)b;
-
-    return aw.counter - bw.counter;
+    return (*(DataWord *)a).counter - (*(DataWord *)b).counter;
 }
 
 // insert element; if present increase counter
@@ -392,9 +364,7 @@ void insert_elem_counter(List *p_list, void *data)
         first = first->next;
     }
 
-    if(first == NULL)
-        push_back(p_list, data);
-
+    push_back(p_list, data);
 }
 
 // read text, parse it to words, and insert those words to the list
