@@ -51,25 +51,27 @@ void *safe_malloc(size_t size)
 // ---------------------- functions to implement
 
 // initialize table fields
+// OK
 void init_ht(hash_table *p_table, int size, DataFp dump_data, DataFp free_data,
              CompareDataFp compare_data, HashFp hash_function, DataPFp modify_data)
 {
     if (size == 0)
     {
         p_table->size = size;
-        p_table->no_elements = 1;
+        p_table->no_elements = 0;
     }
     else
     {
         p_table->no_elements = 0;
         p_table->size = size;
 
-        p_table->ht = safe_malloc(size * sizeof(ht_element));
+        p_table->ht = safe_malloc(size * sizeof(ht_element*));
 
         for(int i = 0; i < size; i++)
-            p_table->ht[i] = safe_malloc(sizeof *p_table->ht[i] * size);
-
-        // has to tablica 2d w tym moemncie
+        {
+            p_table->ht[i] = safe_malloc(sizeof(ht_element));
+            p_table->ht[i]->next = NULL;
+        }
     }
 
     p_table->hash_function = hash_function;
@@ -80,39 +82,49 @@ void init_ht(hash_table *p_table, int size, DataFp dump_data, DataFp free_data,
 }
 
 // print elements of the list with hash n
+// OK
 void dump_list(const hash_table* p_table, int n)
 {
-    ht_element* ht = p_table->ht[n];
-
+    ht_element* ht = p_table->ht[n]->next;
+    
     while (ht != NULL)
     {
         p_table->dump_data(ht->data);
-
         ht = ht->next;
     }
 
 }
 
 // Free element pointed by data_union using free_data() function
+// Tu sie moze wysypać
 void free_element(DataFp free_data, ht_element *to_delete)
 {
-    ht_element *i = to_delete;
-    while (i != NULL)
-    {
-        free_data(i->data);
-        i = i->next;
-    }
+
+    if (free_data != NULL)
+        free_data(to_delete->data);
 
     free(to_delete);
+
 }
 
 // free all elements from the table (and the table itself)
+// Ok
 void free_table(hash_table* p_table)
 {
     ht_element** ht = p_table->ht;
 
     for(int i = 0; i < p_table->size; i++)
-        free_element(p_table->free_data,ht[i]);
+    {
+
+        ht_element *x = p_table->ht[i];
+        while (x != NULL)
+        {
+            ht_element *tmp = x->next;
+            free_element(p_table->free_data, x);
+            x = tmp;
+        }
+        
+    }
 
     free(p_table->ht);
 }
@@ -125,18 +137,38 @@ int hash_base(int k, int size)
     return (int)floor(size * (tmp - floor(tmp)));
 }
 
+//TODO
 void rehash(hash_table *p_table)
 {
     int n = p_table->size;
 
-    p_table->ht = realloc(p_table->ht,n * sizeof(ht_element));
+    p_table->ht = realloc(p_table->ht, 2* n * sizeof(ht_element *));
 
-    // to najprawdopodobniej nie tak
-    // idk trzeba zapytać o to
-    // w sensie indeksowo przechodzimy po * a pozniej z pomoca nexta??
     for(int i = 0; i < n; i++)
-        p_table->ht[i] = realloc( p_table->ht[i],sizeof *p_table->ht[i] * n);
+    {
+        ht_element* curr = p_table->ht[i];
+        ht_element *prev   = NULL;
+        /*
+        [1,2,3,   _]
+        4
+        5
+        */
 
+        while (curr != NULL)
+        {
+            int n = p_table->hash_function(curr->data, p_table->size);
+            
+            if (n == i)
+                continue;
+            
+            // insert_element(p_table)
+            
+            prev = curr;
+            curr = curr->next;  
+        }
+        
+    }
+        // p_table->ht[i] = realloc( p_table->ht[i], sizeof *p_table->ht[i] * n);
 }
 
 // find element; return pointer to previous
@@ -154,13 +186,50 @@ ht_element *get_element(hash_table *p_table, data_union *data)
 // insert element
 void insert_element(hash_table *p_table, data_union *data)
 {
-    // ma powiekszac tablice
+    // (stosunek liczby elementow tablicy do jej dlugosci)
+    if(p_table->no_elements / p_table->size > MAX_RATE)
+        rehash(p_table);
+    
+    int n = p_table->hash_function(*data, p_table->size);
+
+    ht_element * new_el = safe_malloc(sizeof(ht_element)); 
+
+    new_el->data = *data;
+    new_el->next = NULL;
+
+    ht_element* ht = p_table->ht[n];
+
+    while (ht->next != NULL) // tu moze sie wykrzaczyc
+        ht = ht->next;
+    
+    ht->next = new_el;
+    
+
+    p_table->no_elements += 1 ;
 }
 
 // remove element
 void remove_element(hash_table *p_table, data_union data)
 {
+    int n = p_table->hash_function(data, p_table->size);
 
+    ht_element* ht = p_table->ht[n];
+    ht_element* prev = p_table->ht[n];
+    
+    while (!p_table->compare_data(ht->data, data)) // tu moze sie wykrzaczyc
+    {
+        prev = ht;
+        ht = ht->next;
+    }
+
+    prev->next = ht->next;
+
+    if(p_table->free_data != NULL)
+        p_table->free_data(ht->data);
+        
+    free(ht);
+
+    p_table->no_elements -= 1;
 }
 
 // type-specific definitions
