@@ -32,8 +32,7 @@ typedef struct hash_table
 {
     int size;
     int no_elements;
-    ht_element **ht; // dlaczego tu jest ** a nie po prostu *
-
+    ht_element **ht;
     DataFp dump_data;
     DataFp free_data;
     CompareDataFp compare_data;
@@ -53,7 +52,6 @@ void insert_element(hash_table *, data_union *);
 // ---------------------- functions to implement
 
 // initialize table fields
-// OK
 void init_ht(hash_table *p_table, int size, DataFp dump_data, DataFp free_data,
              CompareDataFp compare_data, HashFp hash_function, DataPFp modify_data)
 {
@@ -85,11 +83,10 @@ void init_ht(hash_table *p_table, int size, DataFp dump_data, DataFp free_data,
 }
 
 // print elements of the list with hash n
-// OK
 void dump_list(const hash_table* p_table, int n)
 {
     ht_element* ht = p_table->ht[n]->next;
-    
+
     while (ht != NULL)
     {
         p_table->dump_data(ht->data);
@@ -99,7 +96,6 @@ void dump_list(const hash_table* p_table, int n)
 }
 
 // Free element pointed by data_union using free_data() function
-// Tu sie moze wysypać
 void free_element(DataFp free_data, ht_element *to_delete)
 {
     if (free_data != NULL)
@@ -108,7 +104,6 @@ void free_element(DataFp free_data, ht_element *to_delete)
     free(to_delete);
 }
 // free all elements from the table (and the table itself)
-// Ok
 void free_table(hash_table* p_table)
 {
 
@@ -138,7 +133,6 @@ int hash_base(int k, int size)
     return (int)floor(size * (tmp - floor(tmp)));
 }
 
-//TODO
 void rehash(hash_table *p_table)
 {
     ht_element ** new_ht = safe_malloc(p_table->size * 2 * sizeof(ht_element*));
@@ -170,12 +164,6 @@ void rehash(hash_table *p_table)
     p_table->size = 2 * p_table->size;
 }
 
-// find element; return pointer to previous
-ht_element *find_previous(hash_table *p_table, data_union data, int *first)
-{
-
-}
-
 // return pointer to element with given value
 ht_element *get_element(hash_table *p_table, data_union *data)
 {
@@ -192,7 +180,6 @@ ht_element *get_element(hash_table *p_table, data_union *data)
         prev = curr;
         curr = curr->next;
     }
-
 
     return curr;
 }
@@ -236,7 +223,7 @@ void remove_element(hash_table *p_table, data_union data)
 
     ht_element* ht = p_table->ht[n]->next;
     ht_element* prev = p_table->ht[n];
-    
+
     while ( ht != NULL) // tu moze sie wykrzaczyc
     {
         if(p_table->compare_data(ht->data, data) == 0)
@@ -252,7 +239,7 @@ void remove_element(hash_table *p_table, data_union data)
 
     if(p_table->free_data != NULL)
         p_table->free_data(ht->data);
-        
+
     free(ht);
 
     p_table->no_elements -= 1;
@@ -261,7 +248,6 @@ void remove_element(hash_table *p_table, data_union data)
 // type-specific definitions
 
 // int element
-
 int hash_int(data_union data, int size)
 {
     return hash_base(data.int_data, size);
@@ -374,7 +360,6 @@ void modify_word(data_union *data)
 // allocate DataWord structure and insert to the union
 data_union create_data_word(char *value)
 {
-    // value zaalokowane
     char* element = strdup(value);
 
     for(int i = 0; i < strlen(element); i++)
@@ -471,7 +456,7 @@ int main(void) {
             if (e)
                 table.dump_data(e->data);
             //if (table.free_data)
-                //table.free_data(data);
+            //table.free_data(data);
             free_table(&table);
             break;
         default:
