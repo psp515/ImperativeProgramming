@@ -32,7 +32,7 @@ typedef struct hash_table
 {
     int size;
     int no_elements;
-    ht_element **ht;
+    ht_element **ht; // dlaczego tu jest ** a nie po prostu *
 
     DataFp dump_data;
     DataFp free_data;
@@ -143,16 +143,12 @@ void rehash(hash_table *p_table)
     int n = p_table->size;
 
     p_table->ht = realloc(p_table->ht, 2* n * sizeof(ht_element *));
+    // jak powinna działąc ta funkcja
 
     for(int i = 0; i < n; i++)
     {
         ht_element* curr = p_table->ht[i];
         ht_element *prev   = NULL;
-        /*
-        [1,2,3,   _]
-        4
-        5
-        */
 
         while (curr != NULL)
         {
@@ -174,13 +170,13 @@ void rehash(hash_table *p_table)
 // find element; return pointer to previous
 ht_element *find_previous(hash_table *p_table, data_union data, int *first)
 {
-
+    // skip
 }
 
 // return pointer to element with given value
 ht_element *get_element(hash_table *p_table, data_union *data)
 {
-
+    // skip
 }
 
 // insert element
@@ -192,17 +188,28 @@ void insert_element(hash_table *p_table, data_union *data)
     
     int n = p_table->hash_function(*data, p_table->size);
 
-    ht_element * new_el = safe_malloc(sizeof(ht_element)); 
-
+    ht_element * new_el = safe_malloc(sizeof(ht_element));
     new_el->data = *data;
     new_el->next = NULL;
 
     ht_element* ht = p_table->ht[n];
 
+    // to powinno działac jak insert sorted ???
+
     while (ht->next != NULL) // tu moze sie wykrzaczyc
+    {
+        int x = p_table->compare_data(*data, ht->next->data);
+        if(x < 0)
+            break;
+
+        if (x == 0) // nie umieszczam duplikatów
+            return;
+
         ht = ht->next;
-    
+    }
+    ht_element *tmp = ht->next;
     ht->next = new_el;
+    new_el->next = tmp;
     
 
     p_table->no_elements += 1 ;
@@ -211,23 +218,29 @@ void insert_element(hash_table *p_table, data_union *data)
 // remove element
 void remove_element(hash_table *p_table, data_union data)
 {
+    // tu sie cos posypało znowu
     int n = p_table->hash_function(data, p_table->size);
 
-    ht_element* ht = p_table->ht[n];
+    ht_element* ht = p_table->ht[n]->next;
     ht_element* prev = p_table->ht[n];
     
-    while (!p_table->compare_data(ht->data, data)) // tu moze sie wykrzaczyc
+    while ( ht != NULL) // tu moze sie wykrzaczyc
     {
+        if(p_table->compare_data(ht->data, data) == 0)
+            break;
         prev = ht;
         ht = ht->next;
     }
+
+    if (ht == NULL)
+        return;
 
     prev->next = ht->next;
 
     if(p_table->free_data != NULL)
         p_table->free_data(ht->data);
         
-    free(ht);
+    //free(ht); /// to robi wyjątek
 
     p_table->no_elements -= 1;
 }
@@ -249,7 +262,7 @@ void dump_int(data_union data)
 // returns x > 0 if a > b
 int cmp_int(data_union a, data_union b)
 {
-    return a.int_data - b.int_data;
+    return b.int_data - a.int_data;
 }
 
 // read int value and insert to the union
@@ -278,14 +291,22 @@ void dump_char(data_union data)
 
 int cmp_char(data_union a, data_union b)
 {
-    return a.char_data - b.char_data;
+    char aw = tolower(a.char_data );
+    char bw = tolower(b.char_data );
+
+    if (aw < bw)
+        return -1;
+    else if (aw > bw)
+        return 1;
+    else
+        return 0;
 }
 
 // read char value and insert to the union
 data_union create_data_char()
 {
     char x;
-    scanf("%c", &x);
+    scanf(" %c", &x);
 
     data_union data;
     data.char_data = x;
