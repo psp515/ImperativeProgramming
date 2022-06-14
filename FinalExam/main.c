@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+#include <cstdlib>
 int main()
 {
     printf("Hello, World!\n");
@@ -79,7 +81,6 @@ double norm(const Matrix*pm)
 
     return sqrt(sum);
 }
-
 typedef char Data;
 typedef struct tagStackElement
 {
@@ -172,4 +173,95 @@ int readtillend(FILE* file)
     }
 
     return count;
+}
+
+typedef struct {
+    int size; // liczba napisów (długość tablicy)
+    // zakładam ze size to aktualna liczba elementów w tablicy
+    int maxsize; // maksymalny rozmiar tablicy
+    char **strings; // tablica wskaźników do napisów
+} StringTable;
+
+void st_append(StringTable *p_dst, const StringTable *p_src);
+void st_qsort(StringTable *st, int (*cmp)(const void*, const void*));
+
+//TODO
+int st_insert(StringTable *st, const char *txt, int index)
+{
+    if(index >= st->size)
+        return 1;
+
+    char* copy = "";
+    strcpy(copy, txt);
+
+
+
+
+    return 0;
+}
+
+int st_mul_by_to(StringTable *p_dst, const StringTable *p_src, int cnt)
+{
+    if(cnt < 1)
+        return 1;
+
+    for (int x = 0 ; x < cnt; x++)
+    {
+        for (int i =0 ; i < p_src->size; i++)
+        {
+            // zakladam ze append alokuje nowy element bo nie pisze jak działa
+            st_append(p_dst, p_src->strings[i]);
+        }
+    }
+
+    return 0;
+}
+
+void st_zip(StringTable *p_dst, const StringTable *p_src_1, const StringTable *p_src_2)
+{
+    int x = p_src_1->size < p_src_2->size ? p_src_1->size:p_src_2->size;
+
+    for(int i = 0 ; i < x;i++)
+    {
+        char* new = strcat(p_src_1->strings[i], p_src_2->strings[i]);
+        st_append(p_dst, &new);
+    }
+
+    if(x == p_src_1->size &&p_src_1->size != p_src_2->size)
+    {
+        for(int i =x;i < p_src_2->size;i++)
+            st_append(p_dst, p_src_2->strings[i]);
+    }
+
+    if(x == p_src_2->size && p_src_1->size != p_src_2->size)
+    {
+        for(int i =x;i < p_src_2->size;i++)
+            st_append(p_dst, p_src_2->strings[i]);
+    }
+}
+#define MAXSIZE 1024
+// W poleceniu pisało ze mam tą fukcje wiec idk
+void st_qsort(StringTable *st, int (*cmp)(const void*, const void*))
+{
+    qsort((void*)st->strings,(size_t)st->size,sizeof (char*), cmp);
+}
+
+
+int compare( const void *arg1, const void *arg2 )
+{
+    char* x = (char*) arg1;
+    char* y = (char*)arg2;
+
+    int lenx = (int) strlen(x);
+    int leny = (int) strlen(y);
+
+    if(x == y)
+        return strcmp(x, y);
+
+    return leny - lenx; // zapenia ze wiekszy wyraz bedzie wyżej tzn blizej indeksu 0
+}
+
+void sort_it(StringTable *st)
+{
+    st_qsort(st, compare);
 }
