@@ -2,11 +2,11 @@
 #include <math.h>
 #include <string.h>
 #include <cstdlib>
-int main()
-{
-    printf("Hello, World!\n");
-    return 0;
-}
+
+# There is no task description so it makes this a bit useless.
+
+# Task 1 Score: 25/30
+
 typedef struct _matrix{
     int rows;
     int cols;
@@ -42,7 +42,7 @@ int swap_rows(Matrix * m,int r1,int r2)
         m->val[r2][i] = tmp;
     }
 
-    return 1; // nie podano co trzeba zrobic po udaniu
+    return 1; 
 }
 int inplace_add(Matrix*left,const Matrix*right)
 {
@@ -57,8 +57,6 @@ int inplace_add(Matrix*left,const Matrix*right)
 }
 void mul_vect(double *result, const Matrix*pm, const double*vect)
 {
-    // zakladam ze to wektor o 1 kolumnie o dlugosci liczby wierszy macierzy
-    // jezeli wektor tu jest dluszy to sie nie da tego wywnioskowac bez podanego rozmiaru
     for(int i =0;i< pm->rows;i++)
     {
         double sum = 0;
@@ -76,11 +74,16 @@ double norm(const Matrix*pm)
         for(int j = 0; j < pm->cols;j++)
             sum += pm->val[i][j]*pm->val[i][j];
 
-    if (sum == 0) // zerowe wartosci pol to znaczy suma = 0
+    if (sum == 0) 
         return 0;
 
     return sqrt(sum);
 }
+
+
+
+# Task 2 Score: 24/35
+
 typedef char Data;
 typedef struct tagStackElement
 {
@@ -115,7 +118,6 @@ int peek(const Stack *plist)
     while(i->next != NULL)
         i = i->next;
 
-    // tu cos nie gra z zadaniem bo data to char a zwracam int
     return i->data;
 }
 int pop(Stack *plist, Data *pdata)
@@ -175,17 +177,18 @@ int readtillend(FILE* file)
     return count;
 }
 
+//Task 3 Score: 18/35
+
 typedef struct {
-    int size; // liczba napisów (długość tablicy)
-    // zakładam ze size to aktualna liczba elementów w tablicy
-    int maxsize; // maksymalny rozmiar tablicy
-    char **strings; // tablica wskaźników do napisów
+    int size; 
+    int maxsize; 
+    char **strings; 
 } StringTable;
 
 void st_append(StringTable *p_dst, const StringTable *p_src);
 void st_qsort(StringTable *st, int (*cmp)(const void*, const void*));
 
-//TODO
+
 int st_insert(StringTable *st, const char *txt, int index)
 {
     if(index >= st->size)
@@ -240,7 +243,7 @@ void st_zip(StringTable *p_dst, const StringTable *p_src_1, const StringTable *p
     }
 }
 #define MAXSIZE 1024
-// W poleceniu pisało ze mam tą fukcje wiec idk
+
 void st_qsort(StringTable *st, int (*cmp)(const void*, const void*))
 {
     qsort((void*)st->strings,(size_t)st->size,sizeof (char*), cmp);
@@ -258,7 +261,7 @@ int compare( const void *arg1, const void *arg2 )
     if(x == y)
         return strcmp(x, y);
 
-    return leny - lenx; // zapenia ze wiekszy wyraz bedzie wyżej tzn blizej indeksu 0
+    return leny - lenx; 
 }
 
 void sort_it(StringTable *st)
