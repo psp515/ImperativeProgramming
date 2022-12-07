@@ -46,9 +46,7 @@ Exam scores:
 
 ### Built With
 
-* Java
-* JavaFx
-* Junit
+* C
 
 ### Getting Started
 
