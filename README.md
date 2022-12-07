@@ -46,7 +46,11 @@ Exam scores:
 
 ### Built With
 
-* C
+<div>
+  <a>
+    <img src="https://img.shields.io/badge/-C-FFFFFF?logo=c" alt="license" />
+  </a>
+</div>
 
 ### Getting Started
 
