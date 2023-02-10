@@ -29,7 +29,10 @@
 Project contains solutions for Tasks from Imperative programming course on AGH UST in 2021/2022.
 
 Course focused on the basics of C programming language.
-This course provided informations about memory management and alocation, also second main point of this course was knowledge about pointers. Also few simple structures was used in solving some problems.
+This course provided informations about memory management and alocation, also second main point of this course was knowledge about pointers. 
+Also few simple structures was used in solving some problems.
+
+All tasks are described in pdf files in folders.
 
 Labolatory scores:
 ![Zrzut ekranu 2022-06-8 o 20 14 59](https://user-images.githubusercontent.com/69080157/172688013-22f08bfa-e2a4-4d3f-80b0-d50eb434bc06.png)
@@ -51,14 +54,6 @@ Exam scores:
     <img src="https://img.shields.io/badge/-C-FFFFFF?logo=c" alt="license" />
   </a>
 </div>
-
-### Getting Started
-
-Download repository and CLion or VSC.
-
-### Usage 
-
-Repository constains examples for structures, malloc, realloc usecases.
 
 ### License
 
